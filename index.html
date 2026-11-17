@@ -65,10 +65,9 @@ var Q = [
   {id:"promos", type:"one", title:"¿Hacés <u>promociones?</u>", opts:["Nunca","A veces","Siempre"]},
   {id:"encuentran", type:"multi", max:2, title:"¿Cómo te encuentran los <u>clientes nuevos?</u>", hint:"Elegí hasta 2.", opts:["Instagram","Google Maps","Boca a boca","Pasan por la puerta","Apps de delivery"]},
   {id:"redes", type:"one", title:"¿Quién maneja tus <u>redes hoy?</u>", opts:["Yo","Un empleado","Una agencia","Nadie"]},
-  {id:"frecuencia", type:"one", title:"¿Cada cuánto <u>publicás?</u>", opts:["Todos los días","Varias veces por semana","Una vez por semana","Casi nunca"]},
   {id:"mejorar", type:"multi", max:2, title:"¿Qué te gustaría <u>mejorar primero?</u>", hint:"Elegí hasta 2.", opts:["Más gente en los días flojos","Más pedidos o consultas","Mejor imagen","Ordenar las redes","Tener página web"]}
 ];
-var LABELS = {local:"Local",barrio:"Barrio",ig:"Instagram",tipo:"Tipo de local",semana:"Cómo trabaja en la semana",promos:"Promociones",encuentran:"Cómo lo encuentran",redes:"Quién maneja las redes",frecuencia:"Frecuencia de posteos",mejorar:"Quiere mejorar"};
+var LABELS = {local:"Local",barrio:"Barrio",ig:"Instagram",tipo:"Tipo de local",semana:"Cómo trabaja en la semana",promos:"Promociones",encuentran:"Cómo lo encuentran",redes:"Quién maneja las redes",mejorar:"Quiere mejorar"};
 var A = {}, i = -1;
 var app = document.getElementById("app");
 
@@ -143,7 +142,7 @@ function welcome(){
 }
 function buildMsg(){
   var m = "¡Hola Local Lleno! Completé el diagnóstico gratis de Local Lleno.\n\n";
-  ["local","barrio","ig","tipo","semana","promos","encuentran","redes","frecuencia","mejorar"].forEach(function(k){
+  ["local","barrio","ig","tipo","semana","promos","encuentran","redes","mejorar"].forEach(function(k){
     var v = A[k]; if(Array.isArray(v)) v = v.join(", ");
     if(v) m += LABELS[k] + ": " + v + "\n";
   });
@@ -153,7 +152,7 @@ function done(){
   var msg = buildMsg();
   var h = head() + '<div class="bar"><b style="width:100%"></b></div><div class="step">Listo</div><div class="fade"><h2>¡Último paso, <u>ya casi!</u></h2>'
     + '<p class="lead" style="margin-top:8px">Tocá el botón: se abre WhatsApp con tus respuestas escritas. Solo falta que le des <b>enviar</b>.</p><div class="sum">';
-  ["local","barrio","ig","tipo","semana","promos","encuentran","redes","frecuencia","mejorar"].forEach(function(k){
+  ["local","barrio","ig","tipo","semana","promos","encuentran","redes","mejorar"].forEach(function(k){
     var v = A[k]; if(Array.isArray(v)) v = v.join(", ");
     if(v) h += '<div><b>'+esc(LABELS[k])+'</b>'+esc(v)+'</div>';
   });
