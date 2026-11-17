@@ -142,7 +142,7 @@ function welcome(){
   document.getElementById("start").addEventListener("click",function(){i=0;render();window.scrollTo(0,0)});
 }
 function buildMsg(){
-  var m = "¡Hola Maxi! Completé el diagnóstico gratis de Local Lleno.\n\n";
+  var m = "¡Hola Local Lleno! Completé el diagnóstico gratis de Local Lleno.\n\n";
   ["local","barrio","ig","tipo","semana","promos","encuentran","redes","frecuencia","mejorar"].forEach(function(k){
     var v = A[k]; if(Array.isArray(v)) v = v.join(", ");
     if(v) m += LABELS[k] + ": " + v + "\n";
