@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnóstico gratis de tu local · Local Lleno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=Instrument+Sans:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--v:#10302A;--m:#E8A317;--h:#F3F5F2;--vg:#4E6560;--l:#D5DDD9}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--h);color:var(--v);font-family:'Instrument Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.awning{width:100%;height:16px;background:repeating-linear-gradient(90deg,var(--v) 0 28px,var(--m) 28px 56px)}
+.wrap{width:100%;max-width:520px;padding:22px 22px 40px;flex:1;display:flex;flex-direction:column}
+.brand{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.logo{font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;font-size:22px;letter-spacing:.01em}
+.logo i{font-style:normal;color:var(--m)}
+.handle{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--vg)}
+.bar{height:6px;background:var(--l);border-radius:6px;overflow:hidden;margin-bottom:8px}
+.bar b{display:block;height:100%;width:0;background:var(--m);transition:width .3s}
+.step{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--vg);margin-bottom:22px;text-transform:uppercase}
+h1,h2{font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;text-transform:uppercase;line-height:.98;letter-spacing:-.005em}
+h1{font-size:44px}
+h2{font-size:34px;margin-bottom:8px}
+h1 u,h2 u{text-decoration:none;background:linear-gradient(transparent 84%,var(--m) 84%,var(--m) 95%,transparent 95%)}
+p.lead{font-size:17px;line-height:1.45;margin:16px 0 22px;max-width:440px}
+.hint{font-size:14px;color:var(--vg);margin-bottom:16px}
+.chip{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--v);color:var(--h);padding:8px 14px;border-radius:40px;margin-bottom:18px}
+.chip span{color:var(--m)}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;border:1.5px solid var(--l);border-radius:16px;padding:16px 16px;font:700 17px 'Instrument Sans',sans-serif;color:var(--v);cursor:pointer;transition:all .15s}
+.opt .dot{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--l);display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent}
+.opt.sel{background:var(--v);color:var(--h);border-color:var(--v)}
+.opt.sel .dot{background:var(--m);border-color:var(--m);color:var(--v)}
+.opt:active{transform:scale(.99)}
+label.f{display:block;font-size:14px;font-weight:700;margin:16px 0 6px}
+input.t{width:100%;font:400 17px 'Instrument Sans',sans-serif;color:var(--v);background:#fff;border:1.5px solid var(--l);border-radius:14px;padding:14px 16px;outline:none}
+input.t:focus{border-color:var(--v)}
+.row{display:flex;gap:10px;margin-top:26px;align-items:center}
+.btn{display:inline-block;text-align:center;text-decoration:none;font:700 17px 'Instrument Sans',sans-serif;border:none;border-radius:60px;padding:16px 28px;cursor:pointer}
+.btn.p{background:var(--v);color:var(--h);flex:1}
+.btn.p:disabled{opacity:.35;cursor:default}
+.btn.s{background:transparent;color:var(--vg);padding:16px 10px}
+.btn.wa{background:var(--v);color:var(--h);display:block;width:100%}
+.btn.c{background:#fff;color:var(--v);border:1.5px solid var(--l);display:block;width:100%;margin-top:10px}
+.sum{background:#fff;border:1.5px solid var(--l);border-radius:16px;padding:6px 16px;margin:18px 0}
+.sum div{padding:11px 0;border-bottom:1px solid var(--l);font-size:14px}
+.sum div:last-child{border:none}
+.sum b{display:block;font-size:11px;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--vg);margin-bottom:2px;font-weight:500}
+.note{font-size:13px;color:var(--vg);margin-top:14px;line-height:1.4}
+.fade{animation:f .25s ease}
+@keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="awning"></div>
+<div class="wrap" id="app"></div>
+<script>
+var WA = "5491123418636";
+var Q = [
+  {id:"info", type:"text", title:"Contanos de tu <u>local</u>", hint:"Así sabemos de quién es el diagnóstico.", fields:[["Nombre del local","local"],["Barrio","barrio"],["Instagram (@usuario)","ig"]]},
+  {id:"tipo", type:"one", title:"¿Qué tipo de local <u>es?</u>", opts:["Restaurante","Bar","Café","Pizzería","Otro"]},
+  {id:"semana", type:"one", title:"¿Cómo trabaja tu local <u>en la semana?</u>", opts:["Parejo todos los días","Bien solo los fines de semana","Bien solo al mediodía","Irregular"]},
+  {id:"promos", type:"one", title:"¿Hacés <u>promociones?</u>", opts:["Nunca","A veces","Siempre"]},
+  {id:"encuentran", type:"multi", max:2, title:"¿Cómo te encuentran los <u>clientes nuevos?</u>", hint:"Elegí hasta 2.", opts:["Instagram","Google Maps","Boca a boca","Pasan por la puerta","Apps de delivery"]},
+  {id:"redes", type:"one", title:"¿Quién maneja tus <u>redes hoy?</u>", opts:["Yo","Un empleado","Una agencia","Nadie"]},
+  {id:"frecuencia", type:"one", title:"¿Cada cuánto <u>publicás?</u>", opts:["Todos los días","Varias veces por semana","Una vez por semana","Casi nunca"]},
+  {id:"mejorar", type:"multi", max:2, title:"¿Qué te gustaría <u>mejorar primero?</u>", hint:"Elegí hasta 2.", opts:["Más gente en los días flojos","Más pedidos o consultas","Mejor imagen","Ordenar las redes","Tener página web"]}
+];
+var LABELS = {local:"Local",barrio:"Barrio",ig:"Instagram",tipo:"Tipo de local",semana:"Cómo trabaja en la semana",promos:"Promociones",encuentran:"Cómo lo encuentran",redes:"Quién maneja las redes",frecuencia:"Frecuencia de posteos",mejorar:"Quiere mejorar"};
+var A = {}, i = -1;
+var app = document.getElementById("app");
+
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function head(){
+  return '<div class="brand"><div class="logo">LOCAL<i>·</i>LLENO</div><div class="handle">@LOCALLLENO</div></div>';
+}
+function prog(){
+  var pct = Math.round((i/Q.length)*100);
+  return '<div class="bar"><b style="width:'+pct+'%"></b></div><div class="step">Pregunta '+(i+1)+' de '+Q.length+'</div>';
+}
+function render(){
+  if(i < 0) return welcome();
+  if(i >= Q.length) return done();
+  var q = Q[i], h = head() + prog() + '<div class="fade"><h2>'+q.title+'</h2>';
+  if(q.hint) h += '<div class="hint">'+esc(q.hint)+'</div>';
+  if(q.type === "text"){
+    q.fields.forEach(function(f){
+      h += '<label class="f" for="'+f[1]+'">'+esc(f[0])+'</label><input class="t" id="'+f[1]+'" autocomplete="off" value="'+esc(A[f[1]]||"")+'">';
+    });
+  } else {
+    h += '<div class="opts">';
+    q.opts.forEach(function(o,k){
+      var sel = q.type === "one" ? A[q.id] === o : (A[q.id]||[]).indexOf(o) > -1;
+      h += '<button class="opt'+(sel?' sel':'')+'" data-k="'+k+'"><span class="dot">✓</span>'+esc(o)+'</button>';
+    });
+    h += '</div>';
+  }
+  h += '<div class="row">'+(i>0?'<button class="btn s" id="back">← Volver</button>':'')+'<button class="btn p" id="next">'+(i===Q.length-1?'Ver mi resumen':'Siguiente')+'</button></div></div>';
+  app.innerHTML = h;
+  var next = document.getElementById("next");
+  function ok(){
+    if(q.type==="text") return (document.getElementById("local").value.trim().length>0);
+    if(q.type==="one") return !!A[q.id];
+    return (A[q.id]||[]).length>0;
+  }
+  function upd(){next.disabled = !ok()}
+  if(q.type==="text"){
+    q.fields.forEach(function(f){document.getElementById(f[1]).addEventListener("input",upd)});
+  } else {
+    Array.prototype.forEach.call(app.querySelectorAll(".opt"),function(b){
+      b.addEventListener("click",function(){
+        var o = q.opts[+b.getAttribute("data-k")];
+        if(q.type==="one"){A[q.id]=o; render(); setTimeout(go,220);}
+        else{
+          var cur = A[q.id]||[], p = cur.indexOf(o);
+          if(p>-1) cur.splice(p,1); else if(cur.length<q.max) cur.push(o);
+          A[q.id]=cur; render();
+        }
+      });
+    });
+  }
+  function go(){
+    if(q.type==="text") q.fields.forEach(function(f){A[f[1]]=document.getElementById(f[1]) ? document.getElementById(f[1]).value.trim() : A[f[1]]});
+    i++; render(); window.scrollTo(0,0);
+  }
+  next.addEventListener("click",function(){ if(ok()) go(); });
+  var back = document.getElementById("back");
+  if(back) back.addEventListener("click",function(){
+    if(q.type==="text") q.fields.forEach(function(f){A[f[1]]=document.getElementById(f[1]).value.trim()});
+    i--; render();
+  });
+  upd();
+}
+function welcome(){
+  app.innerHTML = head() + '<div class="fade" style="margin-top:6px"><div class="chip"><span>●</span> Sin costo · sin compromiso</div>'
+    + '<h1>Diagnóstico <u>gratis</u> de tu local</h1>'
+    + '<p class="lead">Respondé 8 preguntas tocando opciones. Tarda 3 minutos. Con tus respuestas te armamos un diagnóstico con <b>3 cosas concretas para mejorar</b> y te lo mandamos por WhatsApp en 48 horas.</p>'
+    + '<div class="row"><button class="btn p" id="start">Empezar</button></div>'
+    + '<div class="note">Local Lleno ayuda a restaurantes, bares y locales gastronómicos con sus redes, el diseño y la web.</div></div>';
+  document.getElementById("start").addEventListener("click",function(){i=0;render();window.scrollTo(0,0)});
+}
+function buildMsg(){
+  var m = "¡Hola Maxi! Completé el diagnóstico gratis de Local Lleno.\n\n";
+  ["local","barrio","ig","tipo","semana","promos","encuentran","redes","frecuencia","mejorar"].forEach(function(k){
+    var v = A[k]; if(Array.isArray(v)) v = v.join(", ");
+    if(v) m += LABELS[k] + ": " + v + "\n";
+  });
+  return m;
+}
+function done(){
+  var msg = buildMsg();
+  var h = head() + '<div class="bar"><b style="width:100%"></b></div><div class="step">Listo</div><div class="fade"><h2>¡Último paso, <u>ya casi!</u></h2>'
+    + '<p class="lead" style="margin-top:8px">Tocá el botón: se abre WhatsApp con tus respuestas escritas. Solo falta que le des <b>enviar</b>.</p><div class="sum">';
+  ["local","barrio","ig","tipo","semana","promos","encuentran","redes","frecuencia","mejorar"].forEach(function(k){
+    var v = A[k]; if(Array.isArray(v)) v = v.join(", ");
+    if(v) h += '<div><b>'+esc(LABELS[k])+'</b>'+esc(v)+'</div>';
+  });
+  h += '</div><a class="btn wa" id="wa" href="https://wa.me/'+WA+'?text='+encodeURIComponent(msg)+'" target="_blank" rel="noopener">Enviar mis respuestas por WhatsApp</a>'
+    + '<button class="btn c" id="copy">Copiar mis respuestas</button>'
+    + '<div class="note" id="cn">Si WhatsApp no se abre, copiá tus respuestas y pegalas en un mensaje al <b>11 2341-8636</b>. En 48 hs te mandamos tu diagnóstico gratis.</div>'
+    + '<div class="row"><button class="btn s" id="back">← Cambiar respuestas</button></div></div>';
+  app.innerHTML = h;
+  document.getElementById("copy").addEventListener("click",function(){
+    var n = document.getElementById("cn");
+    try{ navigator.clipboard.writeText(msg).then(function(){n.textContent="¡Copiado! Pegalo en un mensaje al 11 2341-8636."},function(){n.textContent="No pude copiar. Escribinos las respuestas al 11 2341-8636."}) }
+    catch(e){ n.textContent="No pude copiar. Escribinos las respuestas al 11 2341-8636." }
+  });
+  document.getElementById("back").addEventListener("click",function(){i=Q.length-1;render()});
+}
+render();
+</script>
+</body>
+</html>
